@@ -35,7 +35,7 @@ library(grid)
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
-![Danceability vs Energy](overview_plot.png){width=60%}
+![Danceability vs Energy](overview_plot.png)
 
 **Analyse**
 
@@ -65,15 +65,13 @@ The tempo curve shows that the tempo remains relatively stable throughout the tr
 
 ## Chromagram – Locked Out of Heaven
 
-![](chromagram_bruno.png)
+![](load-chroma-1.png)
 
 This chromagram was created in Sonic Visualiser using NNLS Chroma features. It shows how the different pitch classes (C–B) are distributed over time in the song. Several pitch classes appear brighter and more consistent throughout the track. This suggests that the song has a stable tonal centre and stays in the same key for most of the time. This matches what I hear: the harmony does not change very much, especially in the chorus, where the same chord progression repeats.
 
 At certain moments, the chroma intensity becomes stronger. These moments often match sections with higher musical energy, such as the chorus. The repeating horizontal patterns in the visualisation reflect the structured pop form of the song (verse–chorus–verse).
 
 The chromagram clearly shows harmonic repetition and confirms that the song has a strong and stable tonal focus. Compared to more harmonically complex genres, the pitch activity is concentrated around a limited group of notes. This supports the song’s clear pop style and strong tonal identity.
-
-## Cepstrogram – Locked Out of Heaven
 
 ```{r plot-timbre, fig.width=12, fig.height=6, out.width="100%"}
 library(tidyverse)
@@ -98,25 +96,12 @@ timbre_bruno <- read_csv("timbr_bruno.csv")
 # Hernoem TIME naar time
 timbre_bruno <- timbre_bruno %>%
   rename(time = TIME)
-
-# Maak long format
-timbre_long <- timbre_bruno %>%
-  pivot_longer(
-    cols = -time,
-    names_to = "bin",
-    values_to = "value")
-
-# Plot
-ggplot(timbre_long, aes(x = time, y = bin, fill = value)) +
-  geom_tile() +
-  scale_fill_viridis_c() +
-  labs(
-    title = "Timbre Spectrum (Spectral Bins) – Bruno Mars",
-    x = "Time (seconds)",
-    y = "Frequency Bin"
-  ) +
-  theme_minimal()
 ```
+
+## Cepstrogram – Locked Out of Heaven
+
+![](Timbre_spctrum_bruno.png)
+
 
 The timbre visualisation shows how spectral energy is distributed across 21 frequency bins over time. In other words, it shows how the sound colour (timbre) changes during the song.
 
@@ -126,83 +111,11 @@ This corresponds to what I hear: the song keeps a steady, polished pop sound fro
 
 This fits with the tight, radio-oriented production style that is typical of Bruno Mars’ recordings.
 
-```{r load-files, fig.width=12, fig.height=6, out.width="100%"}
-library(tidyverse)
-bruno_tracks <- read_csv("Bruno_corpus.csv")
-michael_tracks <- read_csv("Michael_corpus.csv")
 
-tracks <- bind_rows(
-  bruno_tracks  %>% mutate(artist_group = "Bruno Mars"),
-  michael_tracks %>% mutate(artist_group = "Michael Jackson"))
+![](self_simil.png)
 
-tracks <- tracks %>%
-  rename(
-    track_name = `Track Name`,
-    danceability = Danceability,
-    energy = Energy,
-    valence = Valence,
-    tempo = Tempo,
-    loudness = Loudness)
 
-make_ssm <- function(df, time_col = "TIME", step = 2, method = "euclidean") {
-  df <- df %>% slice(seq(1, n(), by = step))
-  
-  time <- df[[time_col]]
-  X <- df %>%
-    select(-all_of(time_col)) %>%
-    as.matrix()
-  
-  # (optioneel maar vaak handig) normaliseer per feature
-  X <- scale(X)
-  
-  # Afstand tussen alle tijdframes
-  D <- as.matrix(dist(X, method = method))
-  
-  # Maak similarity (0–1): kleine afstand => hoge similarity
-  # We schalen afstanden naar [0,1] en inverteren
-  D01 <- (D - min(D)) / (max(D) - min(D) + 1e-9)
-  S <- 1 - D01
-  
-  list(S = S, time = time)
-}
-
-plot_ssm <- function(ssm_obj, title = "SSM") {
-  S <- ssm_obj$S
-  time <- ssm_obj$time
-  
-  # Zet matrix om naar long format voor ggplot
-  df_long <- as.data.frame(as.table(S))
-  colnames(df_long) <- c("i", "j", "sim")
-  
-  df_long$i <- as.integer(df_long$i)
-  df_long$j <- as.integer(df_long$j)
-  
-  ggplot(df_long, aes(x = i, y = j, fill = sim)) +
-    geom_raster() +
-    scale_fill_viridis_c(limits = c(0, 1)) +
-    coord_fixed() +
-    labs(
-      title = title,
-      x = "Time frame",
-      y = "Time frame",
-      fill = "Similarity"
-    ) +
-    theme_minimal(base_size = 12) +
-    theme(panel.grid = element_blank())
-}
-```
-
-```{r, fig.width=12, fig.height=6, out.width="100%"}
-chroma_bruno <- read_csv("chromagram_bruno.csv")
-ssm_chroma <- make_ssm(chroma_bruno, time_col = "TIME", step = 2)
-plot_ssm(ssm_chroma, title = "Chroma-based Self-Similarity (Bruno Mars)")
-```
-
-```{r, fig.width=12, fig.height=6, out.width="100%"}
-timbre_bruno <- read_csv("timbr_bruno.csv")
-ssm_timbre <- make_ssm(timbre_bruno, time_col = "TIME", step = 2)
-plot_ssm(ssm_timbre, title = "Timbre-based Self-Similarity (Bruno Mars)")
-```
+![](timbre_based.png)
 
 ## 
 
@@ -268,6 +181,7 @@ ggplot(conf_matrix, aes(x = Actual, y = Predicted, fill = Freq)) +
   ) +
   theme_minimal()
 ```
+
 
 **Analyse** The classification model uses musical features such as danceability, energy, tempo, valence, and loudness to predict whether a track belongs to Bruno Mars or Michael Jackson. The KNN model achieves an accuracy of approximately `r round(accuracy, 2)`.
 
