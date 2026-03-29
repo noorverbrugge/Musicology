@@ -207,7 +207,21 @@ This result is consistent with earlier visualisations, which showed a strong ove
 
 These results should be interpreted with caution. The dataset is relatively small, and the features used are quite general. More detailed features, such as timbre descriptors or temporal structure, or a larger dataset, could potentially improve classification performance.
 
-## Assumptions and Limitations
+## 
+**Conclusion**
+
+This portfolio explored the musical characteristics of Bruno Mars and Michael Jackson using a combination of metadata features, audio representations, and machine learning techniques.
+
+The results show that both artists share many similarities in terms of tempo, energy, and danceability, reflecting their position within mainstream pop music. This overlap was visible in multiple visualisations, including the scatterplot and tempo distribution, and was confirmed by the relatively low classification accuracy.
+
+At the same time, some subtle differences were observed. For example, Michael Jackson’s tracks showed a wider spread in energy values, while Bruno Mars’ tracks appeared more consistent. These differences suggest that although the artists operate within a similar stylistic space, there are still measurable variations in their musical characteristics.
+
+The chromagram and self-similarity analyses highlighted the importance of harmonic structure, showing clear repetition and a stable tonal centre. In contrast, the timbre-based representations showed less variation, suggesting that production style remains relatively consistent throughout the track.
+
+Overall, this analysis demonstrates that computational methods can provide useful insights into musical structure and style. However, the results are limited by the size of the dataset and the simplicity of the features used. Future work could include larger datasets and more detailed audio features to gain a deeper understanding of stylistic differences between artists.
+
+## 
+**Assumptions and Limitations**
 
 This analysis assumes that Spotify features such as danceability, energy, and valence are reliable representations of musical characteristics. It also assumes that the selected tracks are representative of each artist’s style.
 
