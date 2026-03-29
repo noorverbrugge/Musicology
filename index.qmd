@@ -9,19 +9,30 @@ format:
 
 # Portfolio
 
-## 
 
-**Intro**
+## Intro
 
-Computational musicology uses digital tools and data analysis to study musical structure, style, and performance. In this portfolio, I explore a small class corpus with songs by Bruno Mars and Michael Jackson. I use metadata such as tempo, danceability, energy, chromagrams, timbre features, tempo curves, and self-similarity matrices. The goal is to show how computational methods can reveal musical patterns that are harder to see by listening alone. In particular, I focus on structure, repetition, harmony, timbre, and tempo. Together, these visualisations give a clearer picture of how songs are organised over time.
+Computational musicology uses digital tools and data analysis to study musical structure, style, and performance. In this portfolio, I explore a small class corpus consisting of songs by Bruno Mars and Michael Jackson. These artists were selected because they both operate within mainstream pop, but differ in production style and historical context, making them suitable for comparison.
 
--   Link naar GitHub repo
--   Link naar je data / notebooks
--   Wat staat waar?
+I analyse metadata such as tempo, danceability, energy, valence, and loudness, as well as audio-derived features such as chromagrams, timbre representations, and self-similarity matrices. The goal is to demonstrate how computational methods can reveal musical patterns that are not immediately apparent through listening alone. In particular, I focus on structure, repetition, harmony, timbre, and tempo. Together, these visualisations provide a more detailed understanding of how songs are organised over time.
+
+GitHub repository: <https://github.com/noorverbrugge/Musicology>
 
 **Corpus overview**
 
-This section gives a general overview of the class corpus. I combine my Bruno Mars and Michael Jackson track lists into one dataset, so that I can compare the two groups visually. The scatterplot below shows the relationship between danceability and energy. This gives a first impression of how the songs are distributed stylistically.
+The corpus consists of a small selection of tracks by Bruno Mars and Michael Jackson, obtained from the class dataset. The tracks include a mix of songs from different periods of each artist’s career, which allows for a broader comparison of their musical styles.
+
+However, the corpus is relatively small and may not fully represent the complete stylistic range of either artist. As a result, the findings should be interpreted as exploratory rather than definitive. The selection of tracks may also introduce bias, depending on which songs are included.
+
+This section gives a general overview of the class corpus. I combine my Bruno Mars and Michael Jackson track lists into one dataset so that I can compare the two groups visually. The scatterplot below shows the relationship between danceability and energy. This gives a first impression of how the songs are distributed stylistically.
+
+**Analysis**
+
+The scatterplot shows that both artists occupy a similar pop-oriented feature space, with generally moderate to high values for danceability and energy. This reflects their shared focus on rhythm, groove, and accessibility within mainstream pop music.
+
+At the same time, there are subtle but meaningful differences. Michael Jackson’s tracks tend to reach higher energy values and show a wider spread across the feature space, while Bruno Mars’ tracks appear more tightly clustered. This suggests that Michael Jackson’s music exhibits greater variation in intensity, whereas Bruno Mars’ tracks are more consistent in their overall energy profile.
+
+These patterns indicate that while the two artists overlap stylistically, there may still be enough variation for computational models to detect differences, although not perfectly.
 
 ```{r setup, include=FALSE}
 library(readr)
@@ -37,41 +48,44 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
 ![Danceability vs Energy](overview_plot.png)
 
-**Analyse**
-
-The scatterplot shows that both artist groups occupy a similar pop-oriented space, with generally moderate to high danceability and energy values. At the same time, there is still some variation across tracks, which suggests that not every song uses the same balance between groove and intensity.
-
 # Tempo
 
 ## Histogram of Tempi in the Class Corpus
 
 This histogram shows the distribution of tempo values in the class corpus. Each bar represents how many tracks fall within a certain BPM range. This helps us see whether the songs tend to cluster around certain tempo ranges.
 
-![](tempo_distribution.png)
+![](tempo_distribution.png){width=65%}
 
-Most songs in the corpus fall within a medium tempo range that is typical for pop music. The Bruno Mars and Michael Jackson songs overlap quite strongly in their tempo distributions, which suggests that both artists often work within similar tempo conventions.
+**Analysis**
+
+The histogram shows a clear concentration of tracks around 110–130 BPM, which is typical for mainstream pop music. Both artists exhibit substantial overlap in their tempo distributions, suggesting that tempo alone is not a strong distinguishing feature.
+
+However, there are subtle differences. Bruno Mars’ tracks show slightly more variation at higher tempo values, while Michael Jackson’s tracks are more concentrated around the central tempo range. This suggests that although both artists operate within similar tempo conventions, Bruno Mars may explore a slightly wider range of tempi across songs. This confirms that tempo is a shared stylistic constraint within pop music rather than a distinguishing feature between artists.
 
 **Tempo Curves for My Contributions**
 
-A tempo curve shows how the estimated tempo changes over time in a track. Unlike the Spotify tempo value, which is only one average BPM value, a tempo curve can reveal small fluctuations or expressive timing differences during the song.
+A tempo curve shows how the estimated tempo changes over time in a track. Unlike the Spotify tempo value, which gives only one average BPM value, a tempo curve can reveal small fluctuations or expressive timing differences during the song.
 
-Instead of showing tempo changes within a single track, we can compare the overall tempo of the tracks in the corpus. This gives an idea of how fast different songs are relative to each other.
+![](tempo_bruno.png){width=65%}
 
-![](tempo_bruno.png)
+**Analysis**
 
-The tempo curve shows that the tempo remains relatively stable throughout the track. This is typical for studio-produced pop music, where the tempo is usually fixed during recording. Small variations may appear due to beat-tracking estimation or subtle timing differences in the performance.
+This visualisation does not show tempo changes within a single track, but instead compares the tempo of different tracks. The values vary considerably, ranging from slower ballads to faster tracks. This indicates that Bruno Mars uses a range of tempo values across songs, rather than maintaining a single tempo style.
+
+This reinforces the idea that tempo is a descriptive feature of individual tracks, but not necessarily a stable characteristic of an artist’s overall style.
+
 
 # Chroma Features
 
-## Chromagram – Locked Out of Heaven
-
-![](load-chroma-1.png)
+## **Chromagram – Locked Out of Heaven**
 
 This chromagram was created in Sonic Visualiser using NNLS Chroma features. It shows how the different pitch classes (C–B) are distributed over time in the song. Several pitch classes appear brighter and more consistent throughout the track. This suggests that the song has a stable tonal centre and stays in the same key for most of the time. This matches what I hear: the harmony does not change very much, especially in the chorus, where the same chord progression repeats.
 
-At certain moments, the chroma intensity becomes stronger. These moments often match sections with higher musical energy, such as the chorus. The repeating horizontal patterns in the visualisation reflect the structured pop form of the song (verse–chorus–verse).
+At certain moments, the chroma intensity becomes stronger. These moments often match sections with higher musical energy, such as the chorus. The repeating horizontal patterns in the visualisation reflect the structured pop form of the song.
 
-The chromagram clearly shows harmonic repetition and confirms that the song has a strong and stable tonal focus. Compared to more harmonically complex genres, the pitch activity is concentrated around a limited group of notes. This supports the song’s clear pop style and strong tonal identity.
+![](load-chroma-1.png)
+
+The chromagram clearly shows harmonic repetition and confirms that the song has a strong and stable tonal focus. Compared to more harmonically complex genres, the pitch activity is concentrated around a limited group of notes. This supports the song’s clear pop style and strong tonal identity. The visual repetition also helps make the formal structure visible, because similar harmonic material tends to return in similar sections. The consistent horizontal patterns suggest repeated harmonic structures, reinforcing the presence of recurring chord progressions.
 
 ```{r plot-timbre, fig.width=12, fig.height=6, out.width="100%"}
 library(tidyverse)
@@ -98,34 +112,36 @@ timbre_bruno <- timbre_bruno %>%
   rename(time = TIME)
 ```
 
-## Cepstrogram – Locked Out of Heaven
+## **Timbre Spectrum – Locked Out of Heaven**
+
+The timbre visualisation shows how spectral energy is distributed across 21 frequency bins over time. In other words, it shows how the sound colour changes during the song.
 
 ![](Timbre_spctrum_bruno.png)
 
+**Analysis**
 
-The timbre visualisation shows how spectral energy is distributed across 21 frequency bins over time. In other words, it shows how the sound colour (timbre) changes during the song.
+The timbre visualisation shows very little variation across frequency bins, with most values appearing similar. While this could suggest a consistent production style, it may also be the result of scaling issues in the visualisation.
 
-Most frequency bins show relatively stable and strong intensity values throughout the track. This suggests that the production style is consistent and compressed. There are not a lot of changes in timbre between different sections of the song.
+Because of this lack of contrast, it is difficult to draw strong conclusions about timbral variation from this plot alone. This highlights an important limitation: not all visualisations equally reveal meaningful musical structure, and careful interpretation is required.
 
-This corresponds to what I hear: the song keeps a steady, polished pop sound from beginning to end. There are slight increases in the lower frequency bins in some sections, which may reflect a stronger presence of bass or drums. However, the overall spectral balance remains quite constant.
+## **Self-Similarity Matrices – Locked Out of Heaven**
 
-This fits with the tight, radio-oriented production style that is typical of Bruno Mars’ recordings.
+The chroma-based self-similarity matrix shows clear block-like shapes along the main diagonal. These square or rectangular areas represent repeated harmonic sections, such as verses and choruses. The strong contrast between similar and different regions shows that harmony plays an important role in shaping the overall structure of the song. The repeating diagonal patterns reflect stable chord progressions and a consistent tonal centre.
 
+In contrast, the timbre-based self-similarity matrix looks more uniform and dense. Although some structural boundaries are still visible, the contrast between sections is less strong. This suggests that while the harmony clearly repeats, the timbral characteristics, such as instrumentation, texture, and production details, remain relatively stable throughout the song.
 
 ![](self_simil.png)
 
 
 ![](timbre_based.png)
 
-## 
-
 **Comparing Chromagram and Cepstrogram**
 
 The chroma-based self-similarity matrix shows clear block-like shapes along the main diagonal. These square or rectangular areas represent repeated harmonic sections, such as verses and choruses. The strong contrast between similar and different regions shows that harmony plays an important role in shaping the overall structure of the song. The repeating diagonal patterns reflect stable chord progressions and a consistent tonal centre.
 
-In contrast, the timbre-based self-similarity matrix looks more uniform and dense. Although some structural boundaries are still visible, the contrast between sections is less strong. This suggests that while the harmony clearly repeats, the timbral characteristics (such as instrumentation, texture, and production details) remain relatively stable throughout the song.
+In contrast, the timbre-based self-similarity matrix looks more uniform and dense. Although some structural boundaries are still visible, the contrast between sections is less strong. This suggests that while the harmony clearly repeats, the timbral characteristics, such as instrumentation, texture, and production details, remain relatively stable throughout the song.
 
-Overall, the chroma matrix makes the formal harmonic structure easier to see, while the timbre matrix highlights the consistent and polished sound texture of the track.
+Overall, the chroma matrix makes the formal harmonic structure easier to see, while the timbre-based matrix highlights the consistent and polished sound texture of the track. Together, these two views are useful because they capture different musical dimensions: chroma focuses more on pitch and harmony, while timbre focuses more on sound colour and production. This comparison shows that the song’s structure is especially clear at the harmonic level, whereas the timbral surface stays relatively constant.
 
 # Classification
 
@@ -183,6 +199,18 @@ ggplot(conf_matrix, aes(x = Actual, y = Predicted, fill = Freq)) +
 ```
 
 
-**Analyse** The classification model uses musical features such as danceability, energy, tempo, valence, and loudness to predict whether a track belongs to Bruno Mars or Michael Jackson. The KNN model achieves an accuracy of approximately `r round(accuracy, 2)`.
+**Analysis**
 
-This result shows that there are measurable differences between the two artists, even though their music also overlaps in style. The model does not achieve perfect accuracy, which reflects the fact that both artists operate within a similar pop genre. However, the model is still able to capture subtle stylistic patterns in the data.
+The model achieves an accuracy of approximately `r round(accuracy, 2)`, which is relatively low and close to random guessing. This suggests that the selected features are not sufficient to reliably distinguish between the two artists.
+
+This result is consistent with earlier visualisations, which showed a strong overlap between the feature distributions of Bruno Mars and Michael Jackson. In other words, the stylistic similarity between the artists makes classification based on these high-level features difficult.
+
+These results should be interpreted with caution. The dataset is relatively small, and the features used are quite general. More detailed features, such as timbre descriptors or temporal structure, or a larger dataset, could potentially improve classification performance.
+
+## Assumptions and Limitations
+
+This analysis assumes that Spotify features such as danceability, energy, and valence are reliable representations of musical characteristics. It also assumes that the selected tracks are representative of each artist’s style.
+
+However, these assumptions may not always hold. These features are simplified abstractions and may not capture the full musical complexity of a track. Additionally, the dataset is relatively small, which limits the generalisability of the conclusions.
+
+Finally, some visualisations, particularly those based on timbre, may be affected by scaling or preprocessing choices, which can influence how patterns appear. This means that conclusions should be interpreted carefully and in context.
